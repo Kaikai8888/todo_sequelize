@@ -8,6 +8,7 @@ const router = require('./routes')
 const app = express()
 const PORT = 3000
 
+
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({ extended: true }))
