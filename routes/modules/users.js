@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const router = express.Router()
 const db = require('../../models')
 const User = db.User
@@ -16,9 +17,15 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body
-  const user = await User.create({ name, email, password })
-  res.redirect('/')
+  try {
+    const { name, email, password, confirmPassword } = req.body
+    let user = await User.findOne({ where: { email } })
+    if (user) return res.render('register', { ...req.body })
+    user = await User.create({ name, email, password })
+    res.redirect('/users/login')
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 router.get('/logout', (req, res) => {
