@@ -11,12 +11,9 @@ module.exports = app => {
     try {
       let user = await User.findOne({ where: { email } })
       user = user.toJSON()
-      console.log('@@1', user, password)
       if (!user) return done(null, false, { message: 'That email is not registered!' })
       const isMatch = await bcrypt.compare(password, user.password)
-      console.log('@@2', isMatch)
       if (!isMatch) return done(null, false, { message: 'Email or Password incorrect.' })
-      console.log('@@3')
       return done(null, user)
     } catch (error) {
       return done(error, false)
