@@ -4,9 +4,10 @@ const db = require('../../models')
 const Todo = db.Todo
 
 router.get('/:id', async (req, res) => {
-  const id = req.params.id
   try {
-    const todo = await Todo.findByPk(id)
+    const id = req.params.id
+    const UserId = req.user.id
+    const todo = await Todo.findOne({ where: { id, UserId } })
     res.render('detail', { todo: todo.toJSON() })
   } catch (error) {
     console.log(error)
