@@ -25,6 +25,43 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const id = req.params.id
+    const UserId = req.user.id
+    const todo = await Todo.findOne({ where: { id, UserId } })
+    if (!todo) return res.redirect('/') //need flash message
+    res.render('edit', { todo: todo.toJSON() })
+  } catch (error) {
+    console.log(error)
+  }
+})
+router.put('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const UserId = req.user.id
+    const todo = await Todo.findOne({ where: { id, UserId } })
+    if (!todo) return res.redirect('/') //need flash message
+    Todo.update({ ...req.body }, { where: { id, UserId } })
+    return res.redirect(`/todos/${id}`)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const UserId = req.user.id
+    const todo = await Todo.findOne({ where: { id, UserId } })
+    if (!todo) return res.redirect('/') //need flash message
+    Todo.destroy({ where: { id, UserId } })
+    return res.redirect(`/`)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 
 
 module.exports = router

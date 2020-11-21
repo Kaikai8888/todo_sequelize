@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
+const flash = require('connect-flash')
 
 const router = require('./routes')
 const usePassport = require('./config/passport.js')
@@ -20,10 +21,14 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+app.use(flash())
 usePassport(app)
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.errorMessage = req.flash('errorMessage')
+  res.locals.successMessage = req.flash('successMessage')
+  res.locals.passportMessage = req.flash('error')
   return next()
 })
 app.use(router)

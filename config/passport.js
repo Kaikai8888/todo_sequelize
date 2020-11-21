@@ -10,8 +10,8 @@ module.exports = app => {
   passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
       let user = await User.findOne({ where: { email } })
-      user = user.toJSON()
       if (!user) return done(null, false, { message: 'That email is not registered!' })
+      user = user.toJSON()
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch) return done(null, false, { message: 'Email or Password incorrect.' })
       return done(null, user)

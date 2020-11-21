@@ -11,7 +11,8 @@ router.get('/login', (req, res) => {
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/users/login'
+  failureRedirect: '/users/login',
+  failureFlash: true
 }))
 
 router.get('/register', (req, res) => {
@@ -21,8 +22,24 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body
+    const error = []
     let user = await User.findOne({ where: { email } })
-    if (user) return res.render('register', { ...req.body })
+
+    if (!name || !email || !password || !confirmPassword) {
+      error.push({ message: 'All fields are required.' })
+    }
+    if (user) {
+      error.push({ message: 'The email is already registered.' })
+    }
+    if (password !== confirmPassword) {
+      error.push({ message: 'Password and confirm password does not match.' })
+    }
+    if (password.length < 8 || password.length > 12) {
+      error.push({ message: 'Password should be between 8 to 12 characters.' })
+    }
+
+    if (error.length) return res.render('register', { ...req.body, error })
+
     user = await User.create({
       name, email,
       password: bcrypt.hashSync(password, bcrypt.genSaltSync(10))
