@@ -1,5 +1,5 @@
 # Expense Tracker
-A simple expense tracking web app to help you manage your todos.
+A web app built with Express.js and Sequelize to help you manage your todos.
 
 ## Features
 * create account with email or facebook account to  manage your todos
