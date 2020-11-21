@@ -4,6 +4,7 @@ A web app built with Express.js and Sequelize to help you manage your todos.
 ## Features
 * create account with email or facebook account to  manage your todos
 * browse all todos on home page
+* click detail button to view detail of a todo record
 * click create button to create a new todo
 * click edit button to edit existing todo's name or check/uncheck todos
 * click delete button to delete todo
