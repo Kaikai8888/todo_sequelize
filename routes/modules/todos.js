@@ -30,7 +30,10 @@ router.get('/:id/edit', async (req, res) => {
     const id = req.params.id
     const UserId = req.user.id
     const todo = await Todo.findOne({ where: { id, UserId } })
-    if (!todo) return res.redirect('/') //need flash message
+    if (!todo) {
+      req.flash('errorMessage', 'Records not found.')
+      return res.redirect('/')
+    }
     res.render('edit', { todo: todo.toJSON() })
   } catch (error) {
     console.log(error)
@@ -41,7 +44,10 @@ router.put('/:id', async (req, res) => {
     const id = req.params.id
     const UserId = req.user.id
     const todo = await Todo.findOne({ where: { id, UserId } })
-    if (!todo) return res.redirect('/') //need flash message
+    if (!todo) {
+      req.flash('errorMessage', 'Records not found.')
+      return res.redirect('/')
+    }
     Todo.update({ ...req.body }, { where: { id, UserId } })
     return res.redirect(`/todos/${id}`)
   } catch (error) {
@@ -54,7 +60,10 @@ router.delete('/:id', async (req, res) => {
     const id = req.params.id
     const UserId = req.user.id
     const todo = await Todo.findOne({ where: { id, UserId } })
-    if (!todo) return res.redirect('/') //need flash message
+    if (!todo) {
+      req.flash('errorMessage', 'Records not found.')
+      return res.redirect('/')
+    }
     Todo.destroy({ where: { id, UserId } })
     return res.redirect(`/`)
   } catch (error) {
