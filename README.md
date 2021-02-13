@@ -1,4 +1,4 @@
-# Expense Tracker
+# My Todo
 A web app built with Express.js and Sequelize to help you manage your todos.
 
 ## Features
